@@ -1,6 +1,18 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from scipy.signal import savgol_filter
+
+
+def savGolSmoother(dataframe, window_length=20, polyorder=1):
+    times = dataframe["Times"].values
+    width = dataframe["Width"].values
+    window_length = len(width) // 8
+
+    smoothed_width = savgol_filter(width, window_length, polyorder)
+    smoothed_df = pd.DataFrame({"Times": times, "Width": smoothed_width})
+    return smoothed_df
 
 
 def linspaceSmoother(df):
@@ -19,7 +31,7 @@ def linspaceSmoother(df):
     # plt.vlines(step_centers, ymin=df['Width'].min(), ymax=df['Width'].max(), color='grey', label='Step Centers')
     # ==============================================================================================================
 
-    # Initialize an empty list to store interpolated step widths
+    # Initialize an empty list to store step widths
     step_widths = []
 
     # Reverse the order of step_centers list
@@ -56,8 +68,8 @@ def linspaceSmoother(df):
         processed_df.loc[df_for_x.index, 'Width'] = y_vals
 
         # ==============================================================================================================
-        # plt.plot(x_vals, y_vals, color='green')
-
+    #     plt.plot(x_vals, y_vals, color='green')
+    #
     # plt.scatter(processed_df['Times'], processed_df['Width'], label='Interpolation Data', s=10, color="blue")
     # plt.legend()
     # plt.grid()
@@ -74,25 +86,23 @@ def linspaceSmoother(df):
     return processed_df
 
 
-def find_appropriate_slope(lst):
+def findSlope(lst):
     """
     Finds the most similar numbers in the list (within 80%).
 
     :param lst: List of slopes.
     :return: Mean of the most similar slope.
     """
-    print(lst)
+    lst = list(filter(lambda x: x < 0, lst))
     slope = []  # Initialize an empty list to store pairs of values that meet the ratio condition
 
     # Loop through the list up to the second-to-last element
     for i in range(len(lst) - 1):
         ratio = lst[i] / lst[i+1]  # Calculate the ratio of the current element to the next element
-        # print(f"{lst[i]}/{lst[i+1]} = {ratio}")
 
         # Check if the ratio is within the range [0.8, 1.2]
-        if 1.3 >= ratio >= 0.7:
+        if 1.2 >= ratio >= 0.8:
             slope.append(lst[i])  # Append the current element to the slope list
-            slope.append(lst[i+1])  # Append the next element to the slope list
 
     # Calculate the average of the values that met the ratio condition
     return sum(slope) / len(slope)
@@ -106,7 +116,7 @@ def autoRegressor(orig_data):
     :return: The slope of the linear part of the 2D data.
     """
     # Smoothed data is prepared using the linspaceSmoother function and assigned to smoothed_data DataFrame
-    smoothed_data = linspaceSmoother(orig_data)
+    smoothed_data = savGolSmoother(orig_data)
 
     # Extract 'Times' and 'Width' columns from the smoothed_data DataFrame
     x = smoothed_data["Times"]
@@ -117,7 +127,7 @@ def autoRegressor(orig_data):
     intercepts = []
 
     # Define the window size for the linear regression analysis
-    window_size = len(x) // 10
+    window_size = len(x) // 7
 
     # Iterate through sections of the data using the defined window size
     for section_start in range(0, len(x), window_size):
@@ -148,8 +158,19 @@ def autoRegressor(orig_data):
     plt.ylabel("Log(Min Width / Needle Width)")
     plt.title("DoS Radius Evolution")
 
-    # Remove 0's from the list of slopes.
-    slopes = list(filter(lambda x: x != 0, slopes))
-
     # Return the plot object and the result of the find_appropriate_slope function
-    return plt, find_appropriate_slope(slopes)
+    orig_slopes = slopes
+
+    slopes = list(filter(lambda x: x < 0, slopes))
+    filtered_slopes = []  # Initialize an empty list to store pairs of values that meet the ratio condition
+
+    # Loop through the list up to the second-to-last element
+    for i in range(len(slopes) - 1):
+        ratio = slopes[i] / slopes[i + 1]  # Calculate the ratio of the current element to the next element
+
+        # Check if the ratio is within the range [0.8, 1.2]
+        if 1.2 >= ratio >= 0.8:
+            filtered_slopes.append(slopes[i])
+
+    # Calculate the average of the values that met the ratio condition
+    return plt, sum(filtered_slopes) / len(filtered_slopes), orig_slopes, filtered_slopes

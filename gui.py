@@ -38,6 +38,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
 
     # Initialize an empty list to store slope-related data
     slope_data = []
+    troubleshoot_data = []
 
     # Iterate through the list of .mp4 files
     for mp4_file in mp4_files:
@@ -45,7 +46,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
         df = measureWidths(filename=mp4_file, needle_mm=needle, fps=frames_ps, show=False, skip=skip_cols)
 
         # Call the function 'autoRegressor' on the DataFrame 'df', which returns a plot and a slope value
-        plot, slope = autoRegressor(df)
+        plot, slope, orig_slopes, filtered_slopes = autoRegressor(df)
 
         # Create a directory based on the name of the .mp4 file (without the extension) to store plot and CSV
         plot_directory = os.path.splitext(mp4_file)[0]
@@ -77,12 +78,23 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
                            'Relaxation Time': -1 / (3 * slope)
                            })
 
+        troubleshoot_data.append({'Filename': os.path.basename(mp4_file),
+                                  'Slope': slope,
+                                  'Original Slopes': orig_slopes,
+                                  'Filtered Slopes': filtered_slopes
+                                  })
+
         # Insert a log message indicating the processing of the current file into a text widget or similar
         result_text.insert("1.0", f"Processed File - {os.path.basename(mp4_file)}\n\n")
 
-    # Create a filename for the CSV containing slope-related data and save the 'slope_data' list to it
+    # Create a filename for the CSV containing slope-related data and save the 'slope_data' and 'troubleshoot_data' list
+    # to it
     result_csv_filename = os.path.join(directory, 'SlopeData.csv')
+    troubleshoot_filename = os.path.join(directory, 'TroubleshootData.csv')
+
+    # Save the data as CSV files
     pd.DataFrame(slope_data).to_csv(result_csv_filename, index=False)
+    pd.DataFrame(troubleshoot_data).to_csv(troubleshoot_filename, index=False)
 
 
 def analyze_files():
@@ -91,9 +103,6 @@ def analyze_files():
 
     :return: None
     """
-
-    result_text.insert("1.0", "Started Processing. Please wait ...\n\n")
-
     # Convert the value entered in the fps_entry widget to an integer and store it in the 'fps' variable
     fps = int(fps_entry.get())
 
@@ -118,8 +127,6 @@ def analyze_files():
 
     # Clear the contents of the needle_width_entry widget
     needle_width_entry.delete(0, tk.END)
-
-    result_text.insert("1.0", "End\n\n")
 
 
 def browse_directory():
