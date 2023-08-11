@@ -57,7 +57,7 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
         frames.append((cap.get(cv2.CAP_PROP_POS_FRAMES) / frames_per_second) * 1000)
 
         if show:
-            cv2.imshow(f"Overlay Frame - {cols} Pixels Wide", binary)
+            cv2.imshow(f"Overlay Frame - {cols} Pixels Wide", frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 print('Exit by key')
                 break
@@ -74,10 +74,10 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
     return df
 
 
-video_file_path = "/Users/ypm/Desktop/try.mp4"
+video_file_path = "/Users/ypm/Desktop/outlier videos/outlier.mp4"
 needle_width = 1.9
 fps = 2999
-measureWidths(video_file_path, needle_mm=needle_width, fps=fps, show=False, skip=1)
+measureWidths(video_file_path, needle_mm=needle_width, fps=fps, show=True, skip=1)
 
 # column = binary_frame[:, c]
 # column_left = binary_frame[:, c - 1] if c > 0 else None

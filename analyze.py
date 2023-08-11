@@ -5,13 +5,28 @@ from sklearn.linear_model import LinearRegression
 from scipy.signal import savgol_filter
 
 
-def savGolSmoother(dataframe, window_length=20, polyorder=1):
+def savGolSmoother(dataframe, polynomial=1):
+    """
+    Smooths the data using the Savitzky-Golay method.
+
+    :param polynomial: The order of the polynomial used to smooth the data.
+    :param dataframe: Data to smooth, inputted as a Panda's dataframe.
+    :return: Smoothed data.
+    """
+    # Extract the 'Times' and 'Width' columns from the input dataframe
     times = dataframe["Times"].values
     width = dataframe["Width"].values
+
+    # Calculate the window length for smoothing
     window_length = len(width) // 8
 
-    smoothed_width = savgol_filter(width, window_length, polyorder)
+    # Apply Savitzky-Golay smoothing to the 'Width' column using the specified polynomial order and window length
+    smoothed_width = savgol_filter(width, window_length, polynomial)
+
+    # Create a new dataframe with the original 'Times' and the smoothed 'Width' values
     smoothed_df = pd.DataFrame({"Times": times, "Width": smoothed_width})
+
+    # Return the smoothed dataframe
     return smoothed_df
 
 
@@ -86,28 +101,6 @@ def linspaceSmoother(df):
     return processed_df
 
 
-def findSlope(lst):
-    """
-    Finds the most similar numbers in the list (within 80%).
-
-    :param lst: List of slopes.
-    :return: Mean of the most similar slope.
-    """
-    lst = list(filter(lambda x: x < 0, lst))
-    slope = []  # Initialize an empty list to store pairs of values that meet the ratio condition
-
-    # Loop through the list up to the second-to-last element
-    for i in range(len(lst) - 1):
-        ratio = lst[i] / lst[i+1]  # Calculate the ratio of the current element to the next element
-
-        # Check if the ratio is within the range [0.8, 1.2]
-        if 1.2 >= ratio >= 0.8:
-            slope.append(lst[i])  # Append the current element to the slope list
-
-    # Calculate the average of the values that met the ratio condition
-    return sum(slope) / len(slope)
-
-
 def autoRegressor(orig_data):
     """
     Finds the slope of the linear part of the 2D data automatically.
@@ -161,7 +154,9 @@ def autoRegressor(orig_data):
     # Return the plot object and the result of the find_appropriate_slope function
     orig_slopes = slopes
 
+    # Only keep decreasing slopes
     slopes = list(filter(lambda x: x < 0, slopes))
+
     filtered_slopes = []  # Initialize an empty list to store pairs of values that meet the ratio condition
 
     # Loop through the list up to the second-to-last element

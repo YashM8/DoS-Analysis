@@ -5,12 +5,29 @@ import utils_find_1st as utf1st
 
 
 def almostSame(num1, num2, num3):
+    """
+    Returns True only if the three numbers are within 5% of each other.
+
+    :param num1: Number one
+    :param num2: Number two
+    :param num3: number three
+    :return:
+    """
+    # Check if all three input numbers are equal.
     if num1 == num2 == num3:
+        # If they are equal, return True.
         return True
+
+    # Find the maximum value among the three input numbers.
     max_value = max(num1, num2, num3)
+
+    # Find the minimum value among the three input numbers.
     min_value = min(num1, num2, num3)
+
+    # Calculate a range threshold as 5% of the difference between the maximum and minimum values.
     range_threshold = (max_value - min_value) * 0.05
 
+    # Check if the absolute difference between num1 and num2 is within the range threshold/
     return (abs(num1 - num2) <= range_threshold and
             abs(num1 - num3) <= range_threshold and
             abs(num2 - num3) <= range_threshold)
@@ -68,35 +85,40 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
         widths_in_frame = []
 
         # Loop through columns of the frame, skipping by 'skip'
-        for c in range(5, cols - 5, skip):
+        for column in range(5, cols - 5, skip):
             # Find the first non-zero pixel in the column (top to bottom)
-            r = utf1st.find_1st(binary_frame[:, c], 1, utf1st.cmp_equal)
-            if r != -1:
-                frame[r, c] = [0, 0, 255]
+            center_row_bottom = utf1st.find_1st(binary_frame[:, column],  # List to look for first element.
+                                                1,  # What to look for.
+                                                utf1st.cmp_equal)  # Check if equal.
+            if center_row_bottom != -1:
+                frame[center_row_bottom, column] = [0, 0, 255]
 
             # Find the first non-zero pixel in the column (bottom to top)
-            ro = utf1st.find_1st(binary_frame[:, c][::-1], 1, utf1st.cmp_equal)
-            if ro != -1:
-                frame[rows - ro - 1, c] = [0, 0, 255]
+            center_row_top = utf1st.find_1st(binary_frame[:, column][::-1], 1, utf1st.cmp_equal)
+            if center_row_top != -1:
+                frame[rows - center_row_top - 1, column] = [0, 0, 255]
 
-            rl = utf1st.find_1st(binary_frame[:, c - 1], 1, utf1st.cmp_equal)
-            rol = utf1st.find_1st(binary_frame[:, c - 1][::-1], 1, utf1st.cmp_equal)
+            # Find the first non-zero pixel in the left column (top to bottom)
+            left_row_bottom = utf1st.find_1st(binary_frame[:, column - 1], 1, utf1st.cmp_equal)
+            left_row_top = utf1st.find_1st(binary_frame[:, column - 1][::-1], 1, utf1st.cmp_equal)
 
-            rr = utf1st.find_1st(binary_frame[:, c + 1], 1, utf1st.cmp_equal)
-            ror = utf1st.find_1st(binary_frame[:, c + 1][::-1], 1, utf1st.cmp_equal)
+            # Find the first non-zero pixel in the right column (top to bottom)
+            right_row_bottom = utf1st.find_1st(binary_frame[:, column + 1], 1, utf1st.cmp_equal)
+            right_row_top = utf1st.find_1st(binary_frame[:, column + 1][::-1], 1, utf1st.cmp_equal)
 
-            width = rows - ro - 1 - r
-            left_width = rows - rol - 1 - rl
-            right_width = rows - ror - 1 - rr
+            # Calculate each row's width to verify the measurement
+            width = rows - center_row_top - 1 - center_row_bottom
+            left_width = rows - left_row_top - 1 - left_row_bottom
+            right_width = rows - right_row_top - 1 - right_row_bottom
 
             if almostSame(width, left_width, right_width):
                 widths_in_frame.append(width)
 
             # Calculate the width of the feature in this column and add it to the list
-            widths_in_frame.append(rows - ro - 1 - r)
+            widths_in_frame.append(rows - center_row_top - 1 - center_row_bottom)
 
         # Calculate the minimum width in the frame and convert it to logarithmic scale
-        min_width = min(widths_in_frame) * 0.00703333333
+        min_width = min(widths_in_frame)
         log_val = np.log(min_width / needle_mm)
 
         # Append the calculated log value and the frame timestamp to the respective lists
