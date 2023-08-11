@@ -1,7 +1,9 @@
 import cv2
+from statistics import mean
 import pandas as pd
 import numpy as np
 import utils_find_1st as utf1st
+import matplotlib.pyplot as plt
 
 
 def almostSame(num1, num2, num3):
@@ -60,26 +62,28 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
         ret, frame = cap.read()
 
         # Check if the frame was read successfully
-        if not ret: break  # Break the loop if there are no more frames to read
+        if not ret:
+            break  # Break the loop if there are no more frames to read
+
+        # Get the dimensions of the frame
+        rows, cols = frame.shape[:2]
 
         # Convert the color frame to grayscale
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # ========================================================
         # t_vals = []
-        # x_coords = [10, 60, 110, 160, 210, 260, 310, 360]
-        # for x in x_coords:
+        # coordinates = [i * 30 + 10 for i in range(8)]
+        # for x in coordinates:
         #     t_vals.append(gray_frame[25, x])
+        #     t_vals.append(gray_frame[rows - 25, x])
         # t_val = int(mean(t_vals))
-        # threshold = t_val - (t_val//15)
+        # threshold = t_val - len(t_vals) - 10
         # ========================================================
 
         # Apply binary thresholding using the Triangle method and create a binary mask
         _, binary = cv2.threshold(gray_frame, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_TRIANGLE)
         binary_frame = binary > 0
-
-        # Get the dimensions of the frame
-        rows, cols = frame.shape[:2]
 
         # Initialize an empty list to store widths of features in the frame
         widths_in_frame = []
@@ -127,14 +131,14 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
 
         if show:
             # Set a window title based on the width of the frame
-            cv2.imshow(f"Overlay Frame - {cols} Pixels Wide", frame)
+            cv2.imshow(f"Overlay Frame - {cols} Pixels Wide", binary)
 
             # Wait for a key press and check if the pressed key is 'q' (ASCII value 113)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     # =================================================================================
-    # plt.scatter(frames, widths, s=6, marker='o', label='Data Points', color="red")
-    # plt.show()
+    plt.scatter(frames, widths, s=6, marker='o', label='Data Points', color="red")
+    plt.show()
     # =================================================================================
 
     # Create a DataFrame using the 'widths' and 'frames' lists
