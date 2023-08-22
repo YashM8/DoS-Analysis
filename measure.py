@@ -137,8 +137,8 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     # =================================================================================
-    plt.scatter(frames, widths, s=6, marker='o', label='Data Points', color="red")
-    plt.show()
+    # plt.scatter(frames, widths, s=6, marker='o', label='Data Points', color="red")
+    # plt.show()
     # =================================================================================
 
     # Create a DataFrame using the 'widths' and 'frames' lists
