@@ -72,17 +72,17 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # ========================================================
-        # t_vals = []
-        # coordinates = [i * 30 + 10 for i in range(8)]
-        # for x in coordinates:
-        #     t_vals.append(gray_frame[25, x])
-        #     t_vals.append(gray_frame[rows - 25, x])
-        # t_val = int(mean(t_vals))
-        # threshold = t_val - len(t_vals) - 10
+        t_vals = []
+        coordinates = [i * 30 + 10 for i in range(8)]
+        for x in coordinates:
+            t_vals.append(gray_frame[25, x])
+            t_vals.append(gray_frame[rows - 25, x])
+        t_val = int(mean(t_vals))
+        threshold = t_val - len(t_vals) - 10
         # ========================================================
 
         # Apply binary thresholding using the Triangle method and create a binary mask
-        _, binary = cv2.threshold(gray_frame, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_TRIANGLE)
+        _, binary = cv2.threshold(gray_frame, threshold, 255, cv2.THRESH_BINARY_INV)  # + cv2.THRESH_TRIANGLE
         binary_frame = binary > 0
 
         # Initialize an empty list to store widths of features in the frame

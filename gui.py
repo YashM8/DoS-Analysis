@@ -43,10 +43,14 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
     # Iterate through the list of .mp4 files
     for mp4_file in mp4_files:
         # Call the function 'measureWidths' with specific parameters and store the returned DataFrame in 'df'
-        df = measureWidths(filename=mp4_file, needle_mm=needle, fps=frames_ps, show=False, skip=skip_cols)
+        df = measureWidths(filename=mp4_file, needle_mm=needle, fps=frames_ps, show=True, skip=skip_cols)
 
         # Call the function 'autoRegressor' on the DataFrame 'df', which returns a plot and a slope value
-        plot, slope, orig_slopes, filtered_slopes = autoRegressor(df)
+        # plot, slope, orig_slopes = autoRegressor(df)
+        # start, stop, orig = findRegion(df, partitions=30, threshold=8)
+        # slope, plot = findSlope(orig, start, stop)
+
+        plot, slope, all_5_slopes = piecewise(df)
 
         # Create a directory based on the name of the .mp4 file (without the extension) to store plot and CSV
         plot_directory = os.path.splitext(mp4_file)[0]
@@ -73,24 +77,24 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
         #                    'Relaxation Time': 1 / (3 * slope)
         #                    })
 
-        slope_data.append({'Filename': os.path.basename(mp4_file),
+        name = os.path.basename(mp4_file)
+
+        slope_data.append({'Filename': name,
                            'Slope': slope,
                            'Relaxation Time': -1 / (3 * slope)
                            })
 
-        troubleshoot_data.append({'Filename': os.path.basename(mp4_file),
+        troubleshoot_data.append({'Filename': name,
                                   'Slope': slope,
-                                  'Original Slopes': orig_slopes,
-                                  'Filtered Slopes': filtered_slopes
+                                  'All Slopes': all_5_slopes,
                                   })
 
         # Insert a log message indicating the processing of the current file into a text widget or similar
         result_text.insert("1.0", f"Processed File - {os.path.basename(mp4_file)}\n\n")
 
-    # Create a filename for the CSV containing slope-related data and save the 'slope_data' and 'troubleshoot_data' list
-    # to it
-    result_csv_filename = os.path.join(directory, 'SlopeData.csv')
-    troubleshoot_filename = os.path.join(directory, 'TroubleshootData.csv')
+    # Save the 'slope_data' and 'troubleshoot_data'
+    result_csv_filename = os.path.join(directory, 'SLOPE_DATA.csv')
+    troubleshoot_filename = os.path.join(directory, 'TROUBLESHOOT.csv')
 
     # Save the data as CSV files
     pd.DataFrame(slope_data).to_csv(result_csv_filename, index=False)
@@ -103,6 +107,8 @@ def analyze_files():
 
     :return: None
     """
+    starting_label.config(text="\nDone\n")
+
     # Convert the value entered in the fps_entry widget to an integer and store it in the 'fps' variable
     fps = int(fps_entry.get())
 
@@ -151,7 +157,7 @@ root = tk.Tk()
 root.title("DoS Data Analysis")
 
 # Create a text widget for displaying results
-result_text = tk.Text(root, height=20, width=70)
+result_text = tk.Text(root, height=20, width=100)
 result_text.pack(side="left", padx=10, pady=10)
 
 # Create a frame for input elements
@@ -184,6 +190,10 @@ directory_button.pack()
 # Create a button to trigger file analysis
 analyze_button = tk.Button(input_frame, text="Analyze Files", command=analyze_files, relief="raised")
 analyze_button.pack()
+
+# Create a label to signal the end of the program
+starting_label = tk.Label(root, text="", font=("Courier", 18, "bold"))
+starting_label.pack()
 
 # Start the main event loop to display the GUI
 root.mainloop()
