@@ -5,7 +5,6 @@ from sklearn.linear_model import LinearRegression
 from scipy.signal import savgol_filter
 from statistics import mean
 import pwlf
-import os
 from scipy import stats
 
 
@@ -18,7 +17,6 @@ def piecewise(df):
     parameter in the 'piecewise.py' library file (in the 'differential_evolution' function within 'fit' function) to
     any random integer.
 
-    TODO:-
     ======================================================================================
     piecewise.py (within the pwlf library) >
     fit >
@@ -64,7 +62,7 @@ def piecewise(df):
     plt.scatter(df['Times'], df['Width'], label='Smoothed Data', color='black')
 
     # Plot regression line
-    plt.plot(xHat, yHat, color='white', label='Piecewise Linear Fit')
+    plt.plot(xHat, yHat, color='yellow', label='Piecewise Linear Fit')
 
     # Color the largest segment in green
     largest_segment_start = myPWLF.fit_breaks[largest_segment_idx]
@@ -168,7 +166,7 @@ def linspaceSmoother(df):
         processed_df.loc[df_for_x.index, 'Times'] = x_vals
         processed_df.loc[df_for_x.index, 'Width'] = y_vals
 
-        # ==============================================================================================================
+    # ==============================================================================================================
     #     plt.plot(x_vals, y_vals, color='green')
     #
     # plt.scatter(processed_df['Times'], processed_df['Width'], label='Interpolation Data', s=10, color="blue")

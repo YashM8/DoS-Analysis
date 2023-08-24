@@ -56,6 +56,8 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
     frames_per_second = fps
     needle_mm = needle_mm
 
+    np.seterr(all='ignore')
+
     # Loop to read frames from the video file
     while cap.isOpened():
         # Read the next frame from the video
