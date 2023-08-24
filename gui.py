@@ -5,6 +5,8 @@ from analyze import *
 from measure import *
 from tkinter import messagebox
 from tkinter import Scale
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Global variable for the directory
 folder = None
@@ -43,14 +45,14 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
     # Iterate through the list of .mp4 files
     for mp4_file in mp4_files:
         # Call the function 'measureWidths' with specific parameters and store the returned DataFrame in 'df'
-        df = measureWidths(filename=mp4_file, needle_mm=needle, fps=frames_ps, show=True, skip=skip_cols)
+        df = measureWidths(filename=mp4_file, needle_mm=needle, fps=frames_ps, show=False, skip=skip_cols)
 
         # Call the function 'autoRegressor' on the DataFrame 'df', which returns a plot and a slope value
         # plot, slope, orig_slopes = autoRegressor(df)
         # start, stop, orig = findRegion(df, partitions=30, threshold=8)
         # slope, plot = findSlope(orig, start, stop)
 
-        plot, slope, all_5_slopes = piecewise(df)
+        myPlot, slope, all_5_slopes = piecewise(df)
 
         # Create a directory based on the name of the .mp4 file (without the extension) to store plot and CSV
         plot_directory = os.path.splitext(mp4_file)[0]
@@ -63,8 +65,8 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
 
         # Create a filename for the plot and save the plot to an image file
         plot_filename = os.path.join(plot_directory, 'OverlayPlot.png')
-        plot.savefig(plot_filename, dpi=200)
-        plot.close()  # Close the plot to free up resources
+        myPlot.savefig(plot_filename, dpi=200)
+        myPlot.close()  # Close the plot to free up resources
 
         # split_info = os.path.basename(mp4_file).split()
         # con = split_info[0]
@@ -90,7 +92,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
                                   })
 
         # Insert a log message indicating the processing of the current file into a text widget or similar
-        result_text.insert("1.0", f"Processed File - {os.path.basename(mp4_file)}\n\n")
+        # result_text.insert("1.0", f"Processed File - {os.path.basename(mp4_file)}\n\n")
 
     # Save the 'slope_data' and 'troubleshoot_data'
     result_csv_filename = os.path.join(directory, 'SLOPE_DATA.csv')
@@ -100,6 +102,8 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
     pd.DataFrame(slope_data).to_csv(result_csv_filename, index=False)
     pd.DataFrame(troubleshoot_data).to_csv(troubleshoot_filename, index=False)
 
+    starting_label.config(text="\nDone\n")
+
 
 def analyze_files():
     """
@@ -107,8 +111,6 @@ def analyze_files():
 
     :return: None
     """
-    starting_label.config(text="\nDone\n")
-
     # Convert the value entered in the fps_entry widget to an integer and store it in the 'fps' variable
     fps = int(fps_entry.get())
 
@@ -156,17 +158,17 @@ def browse_directory():
 root = tk.Tk()
 root.title("DoS Data Analysis")
 
-# Create a text widget for displaying results
-result_text = tk.Text(root, height=20, width=100)
-result_text.pack(side="left", padx=10, pady=10)
+# # Create a text widget for displaying results
+# result_text = tk.Text(root, height=20, width=100)
+# result_text.pack(side="left", padx=10, pady=10)
 
 # Create a frame for input elements
 input_frame = tk.Frame(root)
 input_frame.pack(side="right", padx=10, pady=10)
 
 # Create a slider control
-slider = Scale(root, from_=1, to=50, orient="horizontal")
-slider.pack()
+slider = Scale(root, from_=1, to=50, orient="horizontal", length=150)
+slider.pack(padx=20, pady=20)
 
 # Create labels and entry fields for FPS and needle width
 fps_label = tk.Label(input_frame, text="FPS:")
@@ -181,7 +183,7 @@ needle_width_label.pack()
 
 needle_width_entry = tk.Entry(input_frame)
 needle_width_entry.pack()
-needle_width_entry.insert(0, "2.11")  # Prepopulate needle width entry field
+needle_width_entry.insert(0, "2.11")  # Pre-populate needle width entry field
 
 # Create a button to select a directory
 directory_button = tk.Button(input_frame, text="Select Folder", command=browse_directory, relief="raised")
@@ -193,7 +195,7 @@ analyze_button.pack()
 
 # Create a label to signal the end of the program
 starting_label = tk.Label(root, text="", font=("Courier", 18, "bold"))
-starting_label.pack()
+starting_label.pack(padx=10)
 
 # Start the main event loop to display the GUI
 root.mainloop()
