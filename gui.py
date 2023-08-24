@@ -4,14 +4,12 @@ from tkinter import filedialog
 from analyze import *
 from measure import *
 from tkinter import messagebox
-from tkinter import Scale
 
 # Global variable for the directory
 folder = None
 
 
 def gui_dos():
-
     def process_mp4_file(directory, needle, frames_ps, skip_cols):
         """
         Processes every MP4 file in this directory.
@@ -102,8 +100,6 @@ def gui_dos():
         pd.DataFrame(slope_data).to_csv(result_csv_filename, index=False)
         pd.DataFrame(troubleshoot_data).to_csv(troubleshoot_filename, index=False)
 
-        starting_label.config(text="\nDone!\n")
-
     def analyze_files():
         """
         Command to the 'Analyze' button.
@@ -156,44 +152,41 @@ def gui_dos():
     root = tk.Tk()
     root.title("DoS Data Analysis")
 
-    # # Create a text widget for displaying results
-    # result_text = tk.Text(root, height=20, width=100)
-    # result_text.pack(side="left", padx=10, pady=10)
-
     # Create a frame for input elements
     input_frame = tk.Frame(root)
-    input_frame.pack(side="right", padx=10, pady=10)
-
-    # Create a slider control
-    slider = Scale(root, from_=50, to=1, orient="vertical", length=150)
-    slider.pack(padx=20, pady=20)
+    # input_frame.pack(side="left", padx=20, pady=20)
+    input_frame.grid(row=0, column=0)
 
     # Create labels and entry fields for FPS and needle width
     fps_label = tk.Label(input_frame, text="FPS:")
-    fps_label.pack()
+    fps_label.grid(row=1, column=0, sticky="w", padx=10)
 
     fps_entry = tk.Entry(input_frame)
-    fps_entry.pack()
-    fps_entry.insert(0, "2999")
+    fps_entry.grid(row=1, column=1, padx=5)
+    fps_entry.insert(0, '2999')
 
     needle_width_label = tk.Label(input_frame, text="Needle Width:")
-    needle_width_label.pack()
+    needle_width_label.grid(row=2, column=0, sticky="w", padx=5)
 
     needle_width_entry = tk.Entry(input_frame)
-    needle_width_entry.pack()
-    needle_width_entry.insert(0, "2.11")  # Pre-populate needle width entry field
+    needle_width_entry.grid(row=2, column=1, padx=5)
+    needle_width_entry.insert(0, '2.11')
 
     # Create a button to select a directory
-    directory_button = tk.Button(input_frame, text="Select Folder", command=browse_directory, relief="raised")
-    directory_button.pack()
+    directory_button = tk.Button(input_frame, text="Select Folder", command=browse_directory)
+    directory_button.grid(row=1, columnspan=2, pady=10, column=3, padx=10)
 
     # Create a button to trigger file analysis
-    analyze_button = tk.Button(input_frame, text="Analyze Files", command=analyze_files, relief="raised")
-    analyze_button.pack()
+    analyze_button = tk.Button(input_frame, text="Analyze Files", command=analyze_files)
+    analyze_button.grid(row=2, columnspan=2, pady=10, column=3, padx=10)
+
+    # Create a slider control
+    slider = tk.Scale(root, from_=50, to=1, orient="vertical", length=150)
+    slider.grid(row=0, column=4, padx=30, pady=10)
 
     # Create a label to signal the end of the program
-    starting_label = tk.Label(root, text="", font=("Courier", 20, "bold"), highlightcolor="green")
-    starting_label.pack(padx=10)
+    starting_label = tk.Label(root, text="", font=("Courier", 20, "bold"))
+    starting_label.grid(row=4, padx=10, pady=10)
 
     # Start the main event loop to display the GUI
     root.mainloop()
