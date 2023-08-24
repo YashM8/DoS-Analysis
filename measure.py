@@ -80,7 +80,7 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
             t_vals.append(gray_frame[25, x])
             t_vals.append(gray_frame[rows - 25, x])
         t_val = int(mean(t_vals))
-        threshold = t_val - len(t_vals) - 10
+        threshold = t_val - len(t_vals) - 2
         # ========================================================
 
         # Apply binary thresholding using the Triangle method and create a binary mask
@@ -141,6 +141,7 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
     # =================================================================================
     # plt.scatter(frames, widths, s=6, marker='o', label='Data Points', color="red")
     # plt.show()
+    # print(threshold)
     # =================================================================================
 
     # Create a DataFrame using the 'widths' and 'frames' lists
