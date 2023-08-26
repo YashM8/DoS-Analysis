@@ -9,7 +9,7 @@ from sklearn.linear_model import LinearRegression
 from analyze import linspaceSmoother
 
 
-class PhotoViewerApp:
+class VerifierApp:
 
     def __init__(self):
         self.root = tk.Tk()
@@ -34,8 +34,15 @@ class PhotoViewerApp:
         self.rework_button = Button(self.root, text="Rework", command=self.rework_data)
         self.rework_button.pack()
 
+        self.start_label = Label(self.root, text="Start:")
+        self.start_label.pack()
+
         self.start_time_entry = Entry(self.root)
         self.start_time_entry.pack()
+
+        self.stop_label = Label(self.root, text="Stop:")
+        self.stop_label.pack()
+
         self.stop_time_entry = Entry(self.root)
         self.stop_time_entry.pack()
 
@@ -44,6 +51,9 @@ class PhotoViewerApp:
 
         self.save_button = Button(self.root, text="Save", command=self.save_slope)
         self.save_button.pack()
+
+        self.file_name_label = Label(self.root, text='')
+        self.file_name_label.pack()
 
         self.frame = tk.Frame(self.root)
         self.frame.pack()
@@ -70,12 +80,16 @@ class PhotoViewerApp:
 
     def load_image(self):
         if self.image_paths and 0 <= self.current_index < len(self.image_paths):
+
             image_path = self.image_paths[self.current_index]
             image = Image.open(image_path)
             image = image.resize((600, 300), Image.BILINEAR)
             self.photo = ImageTk.PhotoImage(image)
             self.image_label = Label(self.frame, image=self.photo)
             self.image_label.pack(side=tk.LEFT)
+
+            name = os.path.basename(os.path.dirname(image_path))
+            self.file_name_label.config(text=name)
 
     def show_previous_image(self):
         self.current_index = (self.current_index - 1) % len(self.image_paths)
@@ -95,7 +109,8 @@ class PhotoViewerApp:
         if os.path.exists(data_path):
             self.data = pd.read_csv(data_path)
             self.ax.clear()
-            self.ax.scatter(self.data['Times'], self.data['Width'], s=15)
+            self.ax.scatter(self.data['Times'], self.data['Width'], s=15, color='green')
+            self.ax.grid()
             self.ax.set_xlabel('Time')
             self.ax.set_ylabel('Width')
             self.ax.set_title('Original Data')
@@ -127,6 +142,7 @@ class PhotoViewerApp:
 
             self.ax.scatter(self.data['Times'], self.data['Width'], label='Smoothed Data', s=15, color='black')
             self.ax.plot(subset_data['Times'], y_pred, color='red', label='Linear Regression')
+            self.ax.grid()
             self.ax.set_xlabel('Time')
             self.ax.set_ylabel('Width')
             self.ax.set_title('Original Data and Linear Regression')
@@ -154,5 +170,5 @@ class PhotoViewerApp:
 
 
 if __name__ == "__main__":
-    app = PhotoViewerApp()
+    app = VerifierApp()
     app.main()
