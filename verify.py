@@ -1,6 +1,6 @@
 import os
 import tkinter as tk
-from tkinter import PhotoImage, Label, Button, filedialog, Entry
+from tkinter import Label, Button, filedialog, Entry
 from PIL import Image, ImageTk
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,9 +9,23 @@ from sklearn.linear_model import LinearRegression
 from analyze import linspaceSmoother
 
 
+def get_image_paths(directory):
+    image_paths = []
+    try:
+        for root_dir, _, files in os.walk(directory):
+            if "OverlayPlot.png" in files:
+                image_paths.append(os.path.join(root_dir, "OverlayPlot.png"))
+    except Exception as e:
+        print("Error while getting image paths:", e)
+    return image_paths
+
+
 class VerifierApp:
 
     def __init__(self):
+        self.slope = None
+        self.image_label = None
+        self.photo = None
         self.root = tk.Tk()
         self.root.title("Review and Make Changes")
 
@@ -64,20 +78,15 @@ class VerifierApp:
         self.canvas.get_tk_widget().pack(side=tk.LEFT)
 
     def browse_directory(self):
-        selected_directory = filedialog.askdirectory(initialdir="Desktop",
-                                                     title="Select Directory")
-        if selected_directory:
-            self.dir = selected_directory
-            self.image_paths = self.get_image_paths(selected_directory)
-            self.current_index = 0
-            self.update_image()
-
-    def get_image_paths(self, directory):
-        image_paths = []
-        for root_dir, _, files in os.walk(directory):
-            if "OverlayPlot.png" in files:
-                image_paths.append(os.path.join(root_dir, "OverlayPlot.png"))
-        return image_paths
+        try:
+            selected_directory = filedialog.askdirectory(initialdir="Desktop", title="Select Directory")
+            if selected_directory:
+                self.dir = selected_directory
+                self.image_paths = get_image_paths(selected_directory)
+                self.current_index = 0
+                self.update_image()
+        except Exception as e:
+            print("Error while browsing directory:", e)
 
     def load_image(self):
         if self.image_paths and 0 <= self.current_index < len(self.image_paths):
@@ -160,7 +169,6 @@ class VerifierApp:
         df = pd.read_csv(csv_file_path)
 
         mask = df['Filename'] == name
-        print(mask)
         df.loc[mask, 'Slope'] = slope
         df.loc[mask, 'Relaxation Time'] = -1 / (3 * slope)
 
