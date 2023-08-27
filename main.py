@@ -12,6 +12,9 @@ if __name__ == "__main__":
     dos_app = DosAnalyzerApp()
     dos_app.run()
 
-    verify_app = VerifierApp()
-    verify_app.main()
+    user_response = messagebox.askyesno("Verification", "Do you want to verify?")
+
+    if user_response:
+        verify_app = VerifierApp()
+        verify_app.run()
 

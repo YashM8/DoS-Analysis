@@ -2,6 +2,8 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import ttk
+from ttkthemes import ThemedTk
 
 from analyze import *
 from measure import *
@@ -113,7 +115,7 @@ class DosAnalyzerApp:
         self.needle_width_entry = None
         self.fps_entry = None
         self.folder = None
-        self.root = tk.Tk()
+        self.root = ThemedTk(theme='Arc')
         self.root.title("DoS Data Analysis")
         self.setup_gui()
 
@@ -121,29 +123,29 @@ class DosAnalyzerApp:
         # Set up the graphical user interface (GUI) elements
 
         # Create a frame to hold input widgets
-        input_frame = tk.Frame(self.root)
+        input_frame = ttk.Frame(self.root)
         input_frame.grid(row=0, column=0)
 
         # Create and place labels and entry fields for FPS and Needle Width
-        fps_label = tk.Label(input_frame, text="FPS:")
+        fps_label = ttk.Label(input_frame, text="FPS:")
         fps_label.grid(row=1, column=0, sticky="w", padx=10)
 
-        self.fps_entry = tk.Entry(input_frame)
+        self.fps_entry = ttk.Entry(input_frame)
         self.fps_entry.grid(row=1, column=1, padx=5)
         self.fps_entry.insert(0, '2999')  # Set default FPS value
 
-        needle_width_label = tk.Label(input_frame, text="Needle Width:")
+        needle_width_label = ttk.Label(input_frame, text="Needle Width:")
         needle_width_label.grid(row=2, column=0, sticky="w", padx=5)
 
-        self.needle_width_entry = tk.Entry(input_frame)
+        self.needle_width_entry = ttk.Entry(input_frame)
         self.needle_width_entry.grid(row=2, column=1, padx=5)
         self.needle_width_entry.insert(0, '2.11')  # Set default needle width value
 
         # Create buttons to select a folder and analyze files
-        self.directory_button = tk.Button(input_frame, text="Select Folder", command=self.browse_directory)
+        self.directory_button = ttk.Button(input_frame, text="Select Folder", command=self.browse_directory)
         self.directory_button.grid(row=1, columnspan=2, pady=10, column=3, padx=10)
 
-        self.analyze_button = tk.Button(input_frame, text="Analyze Files", command=self.analyze_files)
+        self.analyze_button = ttk.Button(input_frame, text="Analyze Files", command=self.analyze_files)
         self.analyze_button.grid(row=2, columnspan=2, pady=10, column=3, padx=10)
 
         # Create a slider for skip columns and a label to show current value
@@ -151,7 +153,7 @@ class DosAnalyzerApp:
         self.slider.grid(row=0, column=4, padx=30, pady=10)
 
         # Create a label to display analysis status
-        self.starting_label = tk.Label(self.root, text="", font=("Courier", 20, "bold"))
+        self.starting_label = ttk.Label(self.root, text="", font=("Courier", 20, "bold"))
         self.starting_label.grid(row=4, padx=10, pady=10)
 
     def analyze_files(self):

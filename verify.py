@@ -7,7 +7,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sklearn.linear_model import LinearRegression
-from analyze import linspaceSmoother  # Assuming this is a custom module
+from analyze import linspaceSmoother
+from tkinter import ttk
+from ttkthemes import ThemedTk
 
 
 # Function to get image paths within a directory
@@ -28,55 +30,55 @@ def get_image_paths(directory):
 class VerifierApp:
     def __init__(self):
         # Initialize variables
-        self.slope = None
         self.image_label = None
+        self.slope = None
         self.photo = None
-        self.root = tk.Tk()
+
+        self.root = ThemedTk(theme='Arc')
         self.root.title("Review and Make Changes")
 
-        # Initialize data structures
         self.image_paths = []
         self.current_index = 0
         self.data = None
         self.dir = None
 
         # Create and place GUI components
-        self.browse_button = Button(self.root, text="Browse", command=self.browse_directory)
+        self.browse_button = ttk.Button(self.root, text="Browse", command=self.browse_directory)
         self.browse_button.pack()
 
         self.load_image()
 
-        self.prev_button = Button(self.root, text="Previous", command=self.show_previous_image)
+        self.prev_button = ttk.Button(self.root, text="Previous", command=self.show_previous_image)
         self.prev_button.pack()
 
-        self.next_button = Button(self.root, text="Next", command=self.show_next_image)
+        self.next_button = ttk.Button(self.root, text="Next", command=self.show_next_image)
         self.next_button.pack()
 
-        self.rework_button = Button(self.root, text="Rework", command=self.rework_data)
+        self.rework_button = ttk.Button(self.root, text="Rework", command=self.rework_data)
         self.rework_button.pack()
 
-        self.start_label = Label(self.root, text="Start:")
+        self.start_label = ttk.Label(self.root, text="Start:")
         self.start_label.pack()
 
-        self.start_time_entry = Entry(self.root)
+        self.start_time_entry = ttk.Entry(self.root)
         self.start_time_entry.pack()
 
-        self.stop_label = Label(self.root, text="Stop:")
+        self.stop_label = ttk.Label(self.root, text="Stop:")
         self.stop_label.pack()
 
-        self.stop_time_entry = Entry(self.root)
+        self.stop_time_entry = ttk.Entry(self.root)
         self.stop_time_entry.pack()
 
-        self.fit_button = Button(self.root, text="Fit", command=self.fit_and_plot)
+        self.fit_button = ttk.Button(self.root, text="Fit", command=self.fit_and_plot)
         self.fit_button.pack()
 
-        self.save_button = Button(self.root, text="Save", command=self.save_slope)
+        self.save_button = ttk.Button(self.root, text="Save", command=self.save_slope)
         self.save_button.pack()
 
-        self.file_name_label = Label(self.root, text='')
+        self.file_name_label = ttk.Label(self.root, text='      ')
         self.file_name_label.pack()
 
-        self.frame = tk.Frame(self.root)
+        self.frame = ttk.Frame(self.root)
         self.frame.pack()
 
         self.fig, self.ax = plt.subplots(figsize=(6, 3))
@@ -120,7 +122,7 @@ class VerifierApp:
 
     # Function to update the displayed image
     def update_image(self):
-        if hasattr(self, 'image_label'):
+        if hasattr(self, 'image_label') and self.image_label is not None:
             self.image_label.destroy()
         self.load_image()
 
@@ -188,10 +190,10 @@ class VerifierApp:
         df.to_csv(csv_file_path, index=False)
 
     # Function to start the main GUI event loop
-    def main(self):
+    def run(self):
         self.root.mainloop()
 
 
 if __name__ == "__main__":
     app = VerifierApp()
-    app.main()
+    app.run()
