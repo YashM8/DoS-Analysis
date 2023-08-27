@@ -1,3 +1,4 @@
+# Import necessary libraries
 import os
 import tkinter as tk
 from tkinter import Label, Button, filedialog, Entry
@@ -6,13 +7,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sklearn.linear_model import LinearRegression
-from analyze import linspaceSmoother
+from analyze import linspaceSmoother  # Assuming this is a custom module
 
 
+# Function to get image paths within a directory
 def get_image_paths(directory):
     image_paths = []
     try:
+        # Walk through the directory and its subdirectories
         for root_dir, _, files in os.walk(directory):
+            # Check if OverlayPlot.png exists in the files list
             if "OverlayPlot.png" in files:
                 image_paths.append(os.path.join(root_dir, "OverlayPlot.png"))
     except Exception as e:
@@ -20,20 +24,23 @@ def get_image_paths(directory):
     return image_paths
 
 
+# Main application class
 class VerifierApp:
-
     def __init__(self):
+        # Initialize variables
         self.slope = None
         self.image_label = None
         self.photo = None
         self.root = tk.Tk()
         self.root.title("Review and Make Changes")
 
+        # Initialize data structures
         self.image_paths = []
         self.current_index = 0
         self.data = None
         self.dir = None
 
+        # Create and place GUI components
         self.browse_button = Button(self.root, text="Browse", command=self.browse_directory)
         self.browse_button.pack()
 
@@ -77,6 +84,7 @@ class VerifierApp:
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas.get_tk_widget().pack(side=tk.LEFT)
 
+    # Function to browse and select a directory
     def browse_directory(self):
         try:
             selected_directory = filedialog.askdirectory(initialdir="Desktop", title="Select Directory")
@@ -88,32 +96,35 @@ class VerifierApp:
         except Exception as e:
             print("Error while browsing directory:", e)
 
+    # Function to load and display an image
     def load_image(self):
         if self.image_paths and 0 <= self.current_index < len(self.image_paths):
-
             image_path = self.image_paths[self.current_index]
             image = Image.open(image_path)
             image = image.resize((600, 300), Image.BILINEAR)
             self.photo = ImageTk.PhotoImage(image)
             self.image_label = Label(self.frame, image=self.photo)
             self.image_label.pack(side=tk.LEFT)
-
             name = os.path.basename(os.path.dirname(image_path))
             self.file_name_label.config(text=name)
 
+    # Function to show the previous image in the list
     def show_previous_image(self):
         self.current_index = (self.current_index - 1) % len(self.image_paths)
         self.update_image()
 
+    # Function to show the next image in the list
     def show_next_image(self):
         self.current_index = (self.current_index + 1) % len(self.image_paths)
         self.update_image()
 
+    # Function to update the displayed image
     def update_image(self):
         if hasattr(self, 'image_label'):
             self.image_label.destroy()
         self.load_image()
 
+    # Function to process and display original data
     def rework_data(self):
         data_path = os.path.join(os.path.dirname(self.image_paths[self.current_index]), "OriginalData.csv")
         if os.path.exists(data_path):
@@ -128,12 +139,13 @@ class VerifierApp:
         else:
             print("OriginalData.csv not found.")
 
+    # Function to fit linear regression and plot
     def fit_and_plot(self):
         if self.data is not None:
             self.ax.clear()
             self.ax.scatter(self.data['Times'], self.data['Width'], label='Original Data', s=15)
 
-            self.data = linspaceSmoother(self.data)
+            self.data = linspaceSmoother(self.data)  # Custom smoothing function
 
             if self.start_time_entry.get() == '' or self.stop_time_entry.get() == '':
                 start_time = self.data['Times'].min()
@@ -160,6 +172,7 @@ class VerifierApp:
             self.canvas.draw()
             self.slope = model.coef_[0]
 
+    # Function to save slope data to a CSV file
     def save_slope(self):
         directory = self.dir
         slope = self.slope
@@ -174,6 +187,7 @@ class VerifierApp:
 
         df.to_csv(csv_file_path, index=False)
 
+    # Function to start the main GUI event loop
     def main(self):
         self.root.mainloop()
 

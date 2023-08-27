@@ -105,6 +105,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols):
 
 class DosAnalyzerApp:
     def __init__(self):
+        # Initialize instance variables for GUI elements and default values
         self.starting_label = None
         self.slider = None
         self.analyze_button = None
@@ -117,56 +118,74 @@ class DosAnalyzerApp:
         self.setup_gui()
 
     def setup_gui(self):
+        # Set up the graphical user interface (GUI) elements
+
+        # Create a frame to hold input widgets
         input_frame = tk.Frame(self.root)
         input_frame.grid(row=0, column=0)
 
+        # Create and place labels and entry fields for FPS and Needle Width
         fps_label = tk.Label(input_frame, text="FPS:")
         fps_label.grid(row=1, column=0, sticky="w", padx=10)
 
         self.fps_entry = tk.Entry(input_frame)
         self.fps_entry.grid(row=1, column=1, padx=5)
-        self.fps_entry.insert(0, '2999')
+        self.fps_entry.insert(0, '2999')  # Set default FPS value
 
         needle_width_label = tk.Label(input_frame, text="Needle Width:")
         needle_width_label.grid(row=2, column=0, sticky="w", padx=5)
 
         self.needle_width_entry = tk.Entry(input_frame)
         self.needle_width_entry.grid(row=2, column=1, padx=5)
-        self.needle_width_entry.insert(0, '2.11')
+        self.needle_width_entry.insert(0, '2.11')  # Set default needle width value
 
+        # Create buttons to select a folder and analyze files
         self.directory_button = tk.Button(input_frame, text="Select Folder", command=self.browse_directory)
         self.directory_button.grid(row=1, columnspan=2, pady=10, column=3, padx=10)
 
         self.analyze_button = tk.Button(input_frame, text="Analyze Files", command=self.analyze_files)
         self.analyze_button.grid(row=2, columnspan=2, pady=10, column=3, padx=10)
 
+        # Create a slider for skip columns and a label to show current value
         self.slider = tk.Scale(self.root, from_=50, to=1, orient="vertical", length=150)
         self.slider.grid(row=0, column=4, padx=30, pady=10)
 
+        # Create a label to display analysis status
         self.starting_label = tk.Label(self.root, text="", font=("Courier", 20, "bold"))
         self.starting_label.grid(row=4, padx=10, pady=10)
 
     def analyze_files(self):
+        # Function to analyze files with user-provided parameters
+
         try:
+            # Extract user-provided values for analysis
             fps = int(self.fps_entry.get())
             needle_w = float(self.needle_width_entry.get())
             skip = int(self.slider.get())
         except ValueError:
+            # Handle invalid input with an error message
             messagebox.showerror("Error", "Invalid input. Please enter valid numeric values.")
             return
 
         if self.folder is not None:
+            # If a folder is selected, perform analysis using provided parameters
             process_mp4_file(directory=self.folder, needle=needle_w, frames_ps=fps, skip_cols=skip)
         else:
+            # If no folder is selected, show an error message
             messagebox.showerror("Error", "Please choose a directory!")
 
     def browse_directory(self):
+        # Function to open a dialog for selecting a directory
+
         try:
+            # Open a dialog for selecting a directory and store the chosen path
             self.folder = filedialog.askdirectory(initialdir="Desktop", title="Select Directory")
         except AttributeError:
+            # Handle cases where folder selection was canceled
             messagebox.showerror("Error", "Folder selection was canceled.")
 
     def run(self):
+        # Start the main GUI event loop
         self.root.mainloop()
 
 
