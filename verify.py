@@ -59,6 +59,7 @@ class VerifierApp:
         self.frame.pack()
 
         self.fig, self.ax = plt.subplots(figsize=(6, 3))
+        self.ax.grid()
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas.get_tk_widget().pack(side=tk.LEFT)
 
