@@ -2,7 +2,7 @@
 Run this file to show the GUI for the DoS Analysis Tool.
 
 The automatic file analyzer runs first. After it is done, it stops, the window closes and the manual verification
-app runs
+app runs.
 """
 
 from processing import *
