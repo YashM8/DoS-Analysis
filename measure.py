@@ -1,5 +1,5 @@
 import cv2
-from statistics import mean
+from statistics import mean, median
 import pandas as pd
 import numpy as np
 import utils_find_1st as utf1st
@@ -78,7 +78,9 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
         coordinates = [i * 30 + 10 for i in range(8)]
         for x in coordinates:
             t_vals.append(gray_frame[25, x])
+            frame[25, x] = [0, 255, 0]
             t_vals.append(gray_frame[rows - 25, x])
+            frame[rows - 25, x] = [0, 255, 0]
         t_val = int(mean(t_vals))
         threshold = t_val - len(t_vals) - 2
         # ========================================================
@@ -133,16 +135,14 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
 
         if show:
             # Set a window title based on the width of the frame
-            cv2.imshow(f"Overlay Frame - {cols} Pixels Wide", binary)
+            cv2.imshow(f"Overlay Frame - {cols} Pixels Wide", frame)
 
             # Wait for a key press and check if the pressed key is 'q' (ASCII value 113)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-    # =================================================================================
-    # plt.scatter(frames, widths, s=6, marker='o', label='Data Points', color="red")
-    # plt.show()
-    # print(threshold)
-    # =================================================================================
+    if show:
+        plt.scatter(frames, widths, s=6, marker='o', label='Data Points', color="red")
+        plt.show()
 
     # Create a DataFrame using the 'widths' and 'frames' lists
     df = pd.DataFrame({'Width': widths, 'Times': frames})
@@ -159,3 +159,7 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
 
     # Return the DataFrame
     return df
+
+
+measureWidths("/Users/ypm/Desktop/test files/problem.mp4", needle_mm=2.11, fps=2999,
+              show=False, skip=1)

@@ -5,7 +5,7 @@ The automatic file analyzer runs first. After it is done, it stops, the window c
 app runs
 """
 
-from gui import *
+from processing import *
 from verify import *
 
 if __name__ == "__main__":
