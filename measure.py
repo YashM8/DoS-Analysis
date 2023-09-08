@@ -2,7 +2,7 @@ import cv2
 from statistics import mean, median
 import pandas as pd
 import numpy as np
-import utils_find_1st as utf1st
+import utils_find_1st_copy as utf1st
 import matplotlib.pyplot as plt
 
 
@@ -160,6 +160,3 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
     # Return the DataFrame
     return df
 
-
-measureWidths("/Users/ypm/Desktop/test files/problem.mp4", needle_mm=2.11, fps=2999,
-              show=False, skip=1)

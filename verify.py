@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sklearn.linear_model import LinearRegression
 from analyze import linspaceSmoother
-from tkinter import ttk
-from ttkthemes import ThemedTk
+# from tkinter import ttk
+# from ttkthemes import ThemedTk
 
 
 # Function to get image paths within a directory
@@ -34,7 +34,7 @@ class VerifierApp:
         self.slope = None
         self.photo = None
 
-        self.root = ThemedTk(theme='Arc')
+        self.root = tk.Tk()
         self.root.title("Review and Make Changes")
 
         self.image_paths = []
@@ -43,42 +43,42 @@ class VerifierApp:
         self.dir = None
 
         # Create and place GUI components
-        self.browse_button = ttk.Button(self.root, text="Browse", command=self.browse_directory)
+        self.browse_button = tk.Button(self.root, text="Browse", command=self.browse_directory)
         self.browse_button.pack()
 
         self.load_image()
 
-        self.prev_button = ttk.Button(self.root, text="Previous", command=self.show_previous_image)
+        self.prev_button = tk.Button(self.root, text="Previous", command=self.show_previous_image)
         self.prev_button.pack()
 
-        self.next_button = ttk.Button(self.root, text="Next", command=self.show_next_image)
+        self.next_button = tk.Button(self.root, text="Next", command=self.show_next_image)
         self.next_button.pack()
 
-        self.rework_button = ttk.Button(self.root, text="Rework", command=self.rework_data)
+        self.rework_button = tk.Button(self.root, text="Rework", command=self.rework_data)
         self.rework_button.pack()
 
-        self.start_label = ttk.Label(self.root, text="Start:")
+        self.start_label = tk.Label(self.root, text="Start:")
         self.start_label.pack()
 
-        self.start_time_entry = ttk.Entry(self.root)
+        self.start_time_entry = tk.Entry(self.root)
         self.start_time_entry.pack()
 
-        self.stop_label = ttk.Label(self.root, text="Stop:")
+        self.stop_label = tk.Label(self.root, text="Stop:")
         self.stop_label.pack()
 
-        self.stop_time_entry = ttk.Entry(self.root)
+        self.stop_time_entry = tk.Entry(self.root)
         self.stop_time_entry.pack()
 
-        self.fit_button = ttk.Button(self.root, text="Fit", command=self.fit_and_plot)
+        self.fit_button = tk.Button(self.root, text="Fit", command=self.fit_and_plot)
         self.fit_button.pack()
 
-        self.save_button = ttk.Button(self.root, text="Save", command=self.save_slope)
+        self.save_button = tk.Button(self.root, text="Save", command=self.save_slope)
         self.save_button.pack()
 
-        self.file_name_label = ttk.Label(self.root, text='      ')
+        self.file_name_label = tk.Label(self.root, text='      ')
         self.file_name_label.pack()
 
-        self.frame = ttk.Frame(self.root)
+        self.frame = tk.Frame(self.root)
         self.frame.pack()
 
         self.fig, self.ax = plt.subplots(figsize=(6, 3))
