@@ -2,7 +2,7 @@ import cv2
 from statistics import mean, median
 import pandas as pd
 import numpy as np
-import utils_find_1st_copy as utf1st
+import utils_find_1st as utf1st
 import matplotlib.pyplot as plt
 
 
