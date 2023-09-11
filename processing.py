@@ -24,7 +24,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
     # Initialize empty lists to store slope and troubleshooting data.
     slope_data = []
     troubleshoot_data = []
-    print("Starting...\n")
+    print("\nStarting...\n")
 
     # Iterate through each MP4 file and analyze it.
     for index, mp4_file in enumerate(mp4_files):
