@@ -76,7 +76,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
     count = flagFiles(directory)
 
     print(f"{count} Files Processed.\n")
-    print("Done! Find flagged files with the folder name beginning with 0_FLAG_\n")
+    print("DONE! Find flagged files with the folder name beginning with '0_FLAG_...'\n")
 
     # Define output file paths for slope and troubleshooting data CSV files.
     result_csv_filename = os.path.join(directory, 'SLOPE_DATA.csv')

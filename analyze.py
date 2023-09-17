@@ -235,7 +235,7 @@ def sumDistances(df, name, plot=False):
         plt.show()
 
     # Print the scaled threshold and flag
-    print(f"Threshold:", scaled_threshold, flag)
+    # print(f"Threshold:", scaled_threshold, flag)
 
     # Return the flag value
     return flag
