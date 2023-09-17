@@ -35,6 +35,9 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
             # Perform piecewise analysis and get plot data.
             myPlot, slope, all_5_slopes = piecewise(df)
 
+            # Extract the file name from the path.
+            name = os.path.basename(mp4_file)
+
             # Create a directory for saving analysis results.
             plot_directory = os.path.splitext(mp4_file)[0]
             os.makedirs(plot_directory, exist_ok=True)
@@ -48,8 +51,8 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
             myPlot.savefig(plot_filename, dpi=200)
             myPlot.close()
 
-            # Extract the file name from the path.
-            name = os.path.basename(mp4_file)
+            if slope < 0:
+                name = os.path.basename(mp4_file) + "_!BAD_DATA!"
 
             # Append slope and relaxation time data to 'slope_data' list.
             slope_data.append({'Filename': name,
@@ -71,7 +74,12 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
             messagebox.showerror("Error", f"Error analyzing file: {e}")
 
     # After processing all files, print the total number of files processed.
-    print(f"{len(mp4_files)} Files Processed.")
+    print(f"{len(mp4_files)} Files Processed. Flagging Bad Data...\n")
+
+    count = flagFiles(directory)
+
+    print(f"{count} Files Processed.\n")
+    print("Done! Find flagged files with the folder name beginning with 0_FLAG_\n")
 
     # Define output file paths for slope and troubleshooting data CSV files.
     result_csv_filename = os.path.join(directory, 'SLOPE_DATA.csv')
@@ -124,7 +132,7 @@ if __name__ == "__main__":
     framesPerSecond = 2999
     needleWidth = 2.11  # in mm
     rowsToSkip = 0  # not more than 30
-    folder = "/Users/ypm/Desktop/DoS/test files"  # TODO - CHANGE THIS
+    folder = "/Users/ypm/Desktop/DoS/test files"  # CHANGE THIS
     showVidAndPlot = False
 
     """

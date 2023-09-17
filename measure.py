@@ -13,7 +13,7 @@ def almostSame(num1, num2, num3):
     :param num1: Number one
     :param num2: Number two
     :param num3: number three
-    :return:
+    :return: true iff the numbers are with 5% of each other
     """
     # Check if all three input numbers are equal.
     if num1 == num2 == num3:

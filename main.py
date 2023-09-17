@@ -17,7 +17,7 @@ if __name__ == "__main__":
     framesPerSecond = 2999
     needleWidth = 2.11  # in mm
     rowsToSkip = 0  # not more than 30
-    folder = "/Users/ypm/Desktop/DoS/test files"  # TODO - CHANGE THIS
+    folder = "/Users/ypm/Desktop/lowCon"  # CHANGE THIS
     showVidAndPlot = False
     """
     ===========================================================================
