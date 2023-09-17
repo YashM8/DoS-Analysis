@@ -51,9 +51,6 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
             myPlot.savefig(plot_filename, dpi=200)
             myPlot.close()
 
-            if slope < 0:
-                name = os.path.basename(mp4_file) + "_!BAD_DATA!"
-
             # Append slope and relaxation time data to 'slope_data' list.
             slope_data.append({'Filename': name,
                                'Slope': slope,
