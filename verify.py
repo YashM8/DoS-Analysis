@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sklearn.linear_model import LinearRegression
 from analyze import linspaceSmoother
+from matplotlib.widgets import RectangleSelector
 
 
 # Function to get image paths within a directory
@@ -43,6 +44,10 @@ class VerifierApp:
         self.current_index = 0  # Index of the currently displayed image
         self.data = None  # DataFrame to store data
         self.dir = None  # Directory selected by the user
+
+        # Create a frame for both the plot and the image
+        self.plot_frame = tk.Frame(self.root)
+        self.plot_frame.pack(side=tk.LEFT, padx=10, pady=10)
 
         # Create and place GUI components
         self.browse_button = tk.Button(self.root, text="Browse", command=self.browse_directory)
@@ -84,16 +89,14 @@ class VerifierApp:
 
         # Label to display the file name
         self.file_name_label = tk.Label(self.root, text='      ')
-        self.file_name_label.pack()  # Display the file name label
-
-        self.frame = tk.Frame(self.root)
-        self.frame.pack()  # Create a frame for displaying the plot and checkboxes
+        self.file_name_label.pack(padx=10, pady=10)  # Display the file name label
+        self.file_name_label.config(font=("Helvetica", 14))
 
         # Checkbox for applying smoothing
         self.smooth_var = tk.BooleanVar()
         self.smooth_var.set(True)  # Set the initial state to True
         self.smooth = tk.Checkbutton(
-            self.frame,
+            self.plot_frame,
             text="Apply Smoothing",
             variable=self.smooth_var,
             onvalue=True,
@@ -106,8 +109,8 @@ class VerifierApp:
         # Create a figure and canvas for displaying plots
         self.fig, self.ax = plt.subplots(figsize=(6, 3))
         self.ax.grid()
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
-        self.canvas.get_tk_widget().pack(side=tk.LEFT)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.plot_frame)
+        self.canvas.get_tk_widget().pack(side=tk.TOP, expand=True)  # Display the plot at the top of the frame
 
         # Attach a click event to the canvas
         self.canvas.mpl_connect('button_press_event', self.on_canvas_click)
@@ -161,17 +164,20 @@ class VerifierApp:
     # Function to load and display an image
     def load_image(self):
         """
-        Loads the images from the directory.
+        Loads the images from the directory and displays it below the plot.
 
         :return: None
         """
         if self.image_paths and 0 <= self.current_index < len(self.image_paths):
             image_path = self.image_paths[self.current_index]
             image = Image.open(image_path)
-            image = image.resize((600, 300), Image.BILINEAR)  # Resize the image
+            image = image.resize((600, 300))  # Resize the image
             self.photo = ImageTk.PhotoImage(image)
-            self.image_label = Label(self.frame, image=self.photo)
-            self.image_label.pack(side=tk.LEFT)  # Display the image
+
+            # Create a label for the image and display it below the plot
+            self.image_label = Label(self.plot_frame, image=self.photo)
+            self.image_label.pack(side=tk.BOTTOM)  # Display the image at the bottom of the frame
+
             name = os.path.basename(os.path.dirname(image_path))
             self.file_name_label.config(text=name)  # Update the file name label
 
@@ -186,7 +192,7 @@ class VerifierApp:
 
     def show_next_image(self):
         """
-        Goes to the previous image.
+        Goes to the next image.
 
         :return: None
         """
