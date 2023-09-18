@@ -236,9 +236,12 @@ class VerifierApp:
         """
         if self.data is not None:
             self.ax.clear()
+            data_path = os.path.join(os.path.dirname(self.image_paths[self.current_index]), "OriginalData.csv")
+            self.data = pd.read_csv(data_path)  # Read data from OriginalData.csv
             self.ax.scatter(self.data['Times'], self.data['Width'], label='Original Data', s=15)
 
-            if self.smooth_var.get():
+            self.checkbox()
+            if self.checkbox():
                 self.data = linspaceSmoother(self.data)  # Apply custom smoothing function
 
             if self.start_time_entry.get() == '' or self.stop_time_entry.get() == '':
@@ -276,6 +279,10 @@ class VerifierApp:
         directory = self.dir
         slope = self.slope
         name = os.path.basename(os.path.dirname(self.image_paths[self.current_index])) + '.mp4'
+
+        if name.startswith("0_FLAG_"):
+            modified_string = name.replace("0_FLAG_", "", 1)
+            name = modified_string
 
         csv_file_path = os.path.join(directory, 'SLOPE_DATA.csv')
         df = pd.read_csv(csv_file_path)
