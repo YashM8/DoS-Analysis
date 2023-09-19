@@ -13,18 +13,6 @@ def piecewise(df):
     """
     Performs piecewise regression oh the data and picks the slope over the largest time period.
 
-    NOTE:-
-    A stochastic algorithm is used in this function and to ensure reproducible results, please change the 'seed'
-    parameter in the 'piecewise.py' library file (in the 'differential_evolution' function within 'fit' function) to
-    any random integer.
-
-    ======================================================================================
-    piecewise.py (within the pwlf library) >
-    fit >
-    differential_evolution >
-    seed=None to seed=<Any random integer>
-    ======================================================================================
-
     :param df: Data to perform the segmented regression on.
     :return: Plot and the slope of the desired region.
     """
@@ -41,7 +29,7 @@ def piecewise(df):
     df = df.iloc[:truncate_index]
 
     # Initialize PiecewiseLinFit
-    myPWLF = pwlf.PiecewiseLinFit(df['Times'], df['Width'])
+    myPWLF = pwlf.PiecewiseLinFit(df['Times'], df['Width'], seed=1975)
 
     # Fit the data for n line segments
     myPWLF.fit(5)
