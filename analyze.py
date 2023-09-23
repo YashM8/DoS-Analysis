@@ -171,12 +171,11 @@ def standardize(df, x_col, y_col):
     return df_copy
 
 
-def sumDistances(df, name, plot=False):
+def sumDistances(df, plot=False):
     """
     Finds the total sum of the distances between the points to flag data.
 
     :param df: Dataframe to measure distances in.
-    :param name: Name of the MP4 file.
     :param plot: True if you want to see the plot.
     :return: True iff the data is flagged.
     """
@@ -250,7 +249,7 @@ def flagFiles(directory_path):
             df = pd.read_csv(file_path)
 
             # Call the sumDistances function to check if the file should be flagged
-            flag = sumDistances(df, file_path)
+            flag = sumDistances(df)
 
             # If the file is flagged, increment the count and move it to a new folder
             if flag:

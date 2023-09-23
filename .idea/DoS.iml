@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/video_files/0.01wt_ wsr 301, 4 Aug 2023 YM  (1)" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/0.01wt_ wsr 301, 4 Aug 2023 YM  (2)" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/0.1 wt.% WSR 301 , transparent vial, trial 1, UV, 01 June 2023" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/0.1 wt.% WSR 301 , transparent vial, trial 3, UV, 01 June 2023" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/0.1wt_ WSR 301, new, 1 Agust 2023, YM  (1)" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/0_FLAG_0.1 wt.% N12K, transparent vial, trial 2, UV, 01 June 2023" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/vlc-record-2023-07-28-13h35m55s-0.1wt_ WSR 301, new,1, 28 July" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/vlc-record-2023-07-28-13h35m55s-0.1wt_ WSR 301, new,1, 28 July YM  (2).mp4-" />
+      <excludeFolder url="file://$MODULE_DIR$/video_files/vlc-record-2023-07-28-13h38m56s-0.1wt_ WSR 301, new,1, 28 July YM  (3).mp4-" />
+    </content>
     <orderEntry type="jdk" jdkName="cpsc330" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

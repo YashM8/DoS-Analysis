@@ -6,35 +6,6 @@ import utils_find_1st as utf1st
 import matplotlib.pyplot as plt
 
 
-def almostSame(num1, num2, num3):
-    """
-    Returns True only if the three numbers are within 5% of each other.
-
-    :param num1: Number one
-    :param num2: Number two
-    :param num3: number three
-    :return: true iff the numbers are with 5% of each other
-    """
-    # Check if all three input numbers are equal.
-    if num1 == num2 == num3:
-        # If they are equal, return True.
-        return True
-
-    # Find the maximum value among the three input numbers.
-    max_value = max(num1, num2, num3)
-
-    # Find the minimum value among the three input numbers.
-    min_value = min(num1, num2, num3)
-
-    # Calculate a range threshold as 5% of the difference between the maximum and minimum values.
-    range_threshold = (max_value - min_value) * 0.05
-
-    # Check if the absolute difference between num1 and num2 is within the range threshold/
-    return (abs(num1 - num2) <= range_threshold and
-            abs(num1 - num3) <= range_threshold and
-            abs(num2 - num3) <= range_threshold)
-
-
 def measureWidths(filename, needle_mm, fps, show=False, skip=1):
     """
     Measures the width of the smallest part of the droplet.
@@ -119,7 +90,7 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
             left_width = rows - left_row_top - 1 - left_row_bottom
             right_width = rows - right_row_top - 1 - right_row_bottom
 
-            if almostSame(width, left_width, right_width):
+            if round(width, 1) == round(left_width, 1) == round(right_width, 1):
                 widths_in_frame.append(width)
 
             # Calculate the width of the feature in this column and add it to the list
@@ -159,4 +130,3 @@ def measureWidths(filename, needle_mm, fps, show=False, skip=1):
 
     # Return the DataFrame
     return df
-

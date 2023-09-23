@@ -75,7 +75,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
 
     count = flagFiles(directory)
 
-    print(f"{count} Files Processed.\n")
+    print(f"{count} Files Flagged.\n")
     print("DONE! Find flagged files with the folder name beginning with '0_FLAG_...'\n")
 
     # Define output file paths for slope and troubleshooting data CSV files.
@@ -104,6 +104,7 @@ class DosAnalyzerApp:
             assert type(self.fps) == int
             assert type(self.skip) == int
             assert type(self.directory) == str
+
         except ValueError:
             # Display an error message if the inputs are not valid.
             messagebox.showerror("Error", "Invalid input. Please enter valid numeric values.")
