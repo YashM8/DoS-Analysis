@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sklearn.linear_model import LinearRegression
 from analyze import linspaceSmoother
-from matplotlib.widgets import RectangleSelector
 
 
 # Function to get image paths within a directory
@@ -47,6 +46,11 @@ class VerifierApp:
 
         # Create a frame for both the plot and the image
         self.plot_frame = tk.Frame(self.root)
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        # Set the window size to fill the screen
+        self.root.geometry(f"{screen_width - (screen_width // 10)}x{screen_height - (screen_height // 10)}")
         self.plot_frame.pack(side=tk.LEFT, padx=10, pady=10)
 
         # Create and place GUI components
@@ -101,13 +105,14 @@ class VerifierApp:
             variable=self.smooth_var,
             onvalue=True,
             offvalue=False,
-            command=self.checkbox
+            command=self.checkbox,
+            font=("Helvetica", 16, 'bold')
         )
         self.smooth.select()  # Initially, the checkbox is selected
         self.smooth.pack()  # Display the checkbox
 
         # Create a figure and canvas for displaying plots
-        self.fig, self.ax = plt.subplots(figsize=(6, 3))
+        self.fig, self.ax = plt.subplots(figsize=(8, 4))
         self.ax.grid()
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.plot_frame)
         self.canvas.get_tk_widget().pack(side=tk.TOP, expand=True)  # Display the plot at the top of the frame
@@ -171,7 +176,7 @@ class VerifierApp:
         if self.image_paths and 0 <= self.current_index < len(self.image_paths):
             image_path = self.image_paths[self.current_index]
             image = Image.open(image_path)
-            image = image.resize((600, 300))  # Resize the image
+            image = image.resize((800, 400))  # Resize the image
             self.photo = ImageTk.PhotoImage(image)
 
             # Create a label for the image and display it below the plot
