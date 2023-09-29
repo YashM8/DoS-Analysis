@@ -25,7 +25,7 @@ Flagging bad data - Bad data is flagged automatically based on the sparsity of p
    - Show value. Set to `True` to show the video being processed and the plot with overlay.
    - Breaks, which are the number of breaks for the piecewise linear fit. The default is 6 segments.
 
-2. Allow time to process the files. The progress will be displayed in the console. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration.
+2. Allow time to process the files. The progress will be displayed in the console. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration. You can identify them as folders starting with `0_FLAG_`.
 
 3. You will be asked if you'd like to verify the results. Once, you click yes, a GUI opens up.
    - Browse the directory of the processed files.
