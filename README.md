@@ -7,7 +7,7 @@
 Measures the width of the droplet at it's narrowest point. Automatically finds the desired linear part and finds it's slope after smoothing the data. For extremely low concentrations of most compounds used, there is also a tool to manually change the slope (if necessary) using a GUI.
 
 ## Measurement
-`measure.py` gives the lowest measurement of the width in each frame. It checks each measurement to verify its accuracy before adding it to the dataset. The measurement is reliant on binarizing each frame and the threshold is automatically calculated from the points in the image.
+The `MeasureWidths` function `measure.py` gives the lowest measurement of the width in each frame. It checks each measurement to verify its accuracy before adding it to the dataset. The measurement is reliant on binarizing each frame and the threshold is automatically calculated from the points in the image.
 
 <img src="images/all_cols.png" alt="Alt text" title="Optional title" width="600" height="400">
 
