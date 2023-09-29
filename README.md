@@ -19,15 +19,15 @@ Flagging bad data - Bad data is flagged automatically based on the sparsity of p
 ## Instructions 
 
 1. Add the input parameters - 
-   - Frames-per-second of the camera
-   - Needle width of the camera
+   - Frames-per-second of the camera.
+   - Needle width used.
    - Rows to skip, which is the number of rows that are skipped in each frame.
    - Show value. Set to `True` to show the video being processed and the plot with overlay.
    - Breaks, which are the number of breaks for the piecewise linear fit. The default is 6 segments.
 
 2. Allow time to process the files. The progress will be displayed in the console. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration.
 
-3. You will be asked if you'd like to very the results. Once, you click yes, a GUI opens up.
+3. You will be asked if you'd like to verify the results. Once, you click yes, a GUI opens up.
    - Browse the directory of the processed files.
    - Iterate through the files through the GUI (`next` and `previous` buttons). The generated plots are shown.
    - If an overlay plot looks wrong, click `rework` and it loads the data.
