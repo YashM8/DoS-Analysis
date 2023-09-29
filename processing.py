@@ -6,7 +6,7 @@ from measure import *
 
 
 # Define a function for processing MP4 files in a directory.
-def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
+def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not, breaks):
     # Create an empty list to store MP4 file paths.
     mp4_files = []
 
@@ -33,7 +33,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
             df = measureWidths(filename=mp4_file, needle_mm=needle, fps=frames_ps, show=show_or_not, skip=skip_cols)
 
             # Perform piecewise analysis and get plot data.
-            myPlot, slope, all_5_slopes = piecewise(df)
+            myPlot, slope, all_5_slopes = piecewise(df, breaks)
 
             # Extract the file name from the path.
             name = os.path.basename(mp4_file)
@@ -89,12 +89,17 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not):
 
 # Define a class for the DOS Analyzer application.
 class DosAnalyzerApp:
-    def __init__(self, directory, needle_width, fps, skip, show_the_vid):
+    def __init__(self, directory, needle_width, fps, skip, show_the_vid, breaks):
         self.directory = directory
         self.needle_width = needle_width
         self.fps = fps
         self.skip = skip
         self.show = show_the_vid
+        self.breakpoints = int(breaks)
+
+        if self.breakpoints == 0 or self.breakpoints is None:
+            self.breakpoints = 5
+            print("\nNumber of breakpoints changed to 5. Cannot be 0.\n")
 
     # Method for analyzing files based on user inputs.
     def analyze_files(self):
@@ -104,6 +109,7 @@ class DosAnalyzerApp:
             assert type(self.fps) == int
             assert type(self.skip) == int
             assert type(self.directory) == str
+            assert type(self.breakpoints) == int
 
         except ValueError:
             # Display an error message if the inputs are not valid.
@@ -114,7 +120,8 @@ class DosAnalyzerApp:
         if self.directory is not None:
             # Call the 'process_mp4_file' function to start the analysis.
             process_mp4_file(directory=self.directory, needle=self.needle_width,
-                             frames_ps=self.fps, skip_cols=self.skip, show_or_not=self.show)
+                             frames_ps=self.fps, skip_cols=self.skip, show_or_not=self.show,
+                             breaks=self.breakpoints)
         else:
             # Display an error message if no directory is selected.
             messagebox.showerror("Error", "Please choose a directory!")

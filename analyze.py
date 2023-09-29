@@ -9,7 +9,7 @@ import shutil
 from sklearn.preprocessing import StandardScaler
 
 
-def piecewise(df):
+def piecewise(df, breaks):
     """
     Performs piecewise regression oh the data and picks the slope over the largest time period.
 
@@ -32,7 +32,7 @@ def piecewise(df):
     myPWLF = pwlf.PiecewiseLinFit(df['Times'], df['Width'], seed=1975)
 
     # Fit the data for n line segments
-    myPWLF.fit(5)
+    myPWLF.fit(breaks)
 
     # Calculate slopes
     slopes = myPWLF.calc_slopes()
