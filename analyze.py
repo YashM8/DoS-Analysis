@@ -62,7 +62,7 @@ def piecewise(df, breaks):
         color='green', alpha=0.2, label='Desired Segment'
     )
 
-    plt.xlabel('Times (s)')
+    plt.xlabel('Times (ms)')
     plt.ylabel('Width (mm)')
     plt.title('Piecewise Linear Regression')
     plt.legend()
