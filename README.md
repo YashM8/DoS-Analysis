@@ -1,7 +1,5 @@
 # DoS-Analysis 
 
-### Click [here](https://github.com/YashM8/DoS-Analysis/blob/main/README.md#instructions) for instructions.
-
 ## Brief Overview
 
 Measures the width of the droplet at it's narrowest point. Automatically finds the desired linear part and finds it's slope after smoothing the data. For extremely low concentrations of most compounds used, there is also a tool to manually change the slope (if necessary) using a GUI.
@@ -19,7 +17,7 @@ The `pwlf` library is used to fit a piecewise linear regression on the data and 
 
 <img src="images/OverlayPlot.png" alt="Alt text" title="Optional title" width="600" height="300">
 
-Flagging bad data - Bad data is flagged automatically based on the sparsity of points in the last 20% of the data. The data is standardized before measuring for sparsity.
+**Flagging bad data -** Bad data is flagged automatically based on the sparsity of points in the last 20% of the data. The data is standardized before measuring for sparsity.
 
 ## Instructions 
 
@@ -28,7 +26,7 @@ Flagging bad data - Bad data is flagged automatically based on the sparsity of p
    - Needle width used.
    - Rows to skip, which is the number of rows that are skipped in each frame.
    - Show value. Set to `True` to show the video being processed and the plot with overlay.
-   - Breaks, which are the number of breaks for the piecewise linear fit. The default is 6 segments.
+   - Breaks, which is the number of segments for the piecewise linear fit. The default is 6.
 
 2. Allow time to process the files. The progress will be displayed in the console. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration. You can identify bad data as folders starting with `0_FLAG_<File Name>`. 
 
