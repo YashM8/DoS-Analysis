@@ -15,7 +15,7 @@ The `MeasureWidths` function `measure.py` gives the lowest measurement of the wi
 ## Finding the Slope
 The data is smoothed using a custom function (in `analyze.py`) that connects the centers of each step and interpolates points between them to account for missing values that could affect the linear fit. 
 
-The `pwlf` library is used to fit a piecewise linear regression on the data and the appropriate slope is selected [1]. Differential evolution is used to find the breakpoints for the data. More information can be found [here](https://jekel.me/piecewise_linear_fit_py/how_it_works.html).
+The `pwlf` library is used to fit a piecewise linear regression on the data and the appropriate slope is selected [1]. Differential evolution is used to find the breakpoints for the data. More information and detailed workings of the library can be found [here](https://jekel.me/piecewise_linear_fit_py/how_it_works.html).
 
 <img src="images/OverlayPlot.png" alt="Alt text" title="Optional title" width="600" height="300">
 
