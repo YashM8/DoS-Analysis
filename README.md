@@ -43,10 +43,8 @@ The `pwlf` library is used to fit a piecewise linear regression on the data and 
   
 ## Workflow
 
-1. Measure => 2. Data => 3. Smoothening => 4. Piecewise Linear Fit => 5. Slope => 6. Flagging => 7. Manual Verification (Optional)
-
-| Header 1 | 
-| -------- | 
+| 1. Measure => | 2. Get Data => | 3. Smoothening =>| 4. Piecewise Linear Fit => | 5. Slope => | 6. Flagging => | 7. Manual Verification (Optional) |
+|---------------|----------------| ----------------|----------------| ----------------|----------------|----------------|
 
 Steps 1 through 6 are done for every file in the specified directory automatically. Step 7 is done for every file manually through a GUI and is intended for flagged files.
 
