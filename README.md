@@ -1,6 +1,6 @@
 # DoS Analysis Tool
 
-### Click [here](#instructions) for instructions.
+### Click [here](#instructions) to jump to  instructions.
 
 ## Brief Overview
 
