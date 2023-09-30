@@ -236,3 +236,54 @@ def findSlope(df, start, end):
     plt.grid()
 
     return slope, plt  # Return the calculated slope and the plot object
+
+
+def numerical_derivative(dataframe, x_column, y_column):
+    # Extract the data from the dataframe
+    x = dataframe[x_column].values
+    y = dataframe[y_column].values
+
+    # Calculate the differences in x and y
+    dx = np.gradient(x)
+    dy = np.gradient(y)
+
+    # Calculate the derivative dy/dx
+    derivative = dy / dx
+
+    # Find points where the derivative is close to 0 (e.g., within a small threshold)
+    zero_derivative_indices = np.where(np.abs(derivative) < 0.01)[0]
+
+    # Fit a linear regression line through the original data
+    x_zero_derivative = x[zero_derivative_indices]
+    y_zero_derivative = y[zero_derivative_indices]
+    regression_model = LinearRegression().fit(x_zero_derivative.reshape(-1, 1), y_zero_derivative.reshape(-1, 1))
+    y_pred = regression_model.predict(x.reshape(-1, 1))
+
+    # Create a plot to display the original data, points with zero derivative, and regression line
+    plt.figure(figsize=(12, 6))
+
+    # Plot the original data
+    plt.plot(x, y, label='Original Data', color='blue')
+    plt.xlabel('Time')
+    plt.ylabel('Width')
+    plt.title('Original Data')
+    plt.grid(True)
+    plt.legend()
+
+    # Plot the points with zero derivative
+    plt.scatter(x_zero_derivative, y_zero_derivative, label='Points with Zero Derivative', color='green', marker='o')
+
+    # Plot the regression line
+    plt.plot(x, y_pred, label='Regression Line', color='orange')
+
+    plt.xlabel('Time')
+    plt.ylabel('Width')
+    plt.title('Regression Line and Points with Zero Derivative')
+    plt.grid(True)
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+    return x, y, zero_derivative_indices, regression_model
+
