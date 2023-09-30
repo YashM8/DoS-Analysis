@@ -16,7 +16,7 @@ if __name__ == "__main__":
     framesPerSecond = 2999
     needleWidth = 2.11                            # in millimeter
     rowsToSkip = 0                                # no more than 30 for accurate results.
-    folder = "/Users/ypm/Desktop/DoS/test_big"
+    folder = "/Users/ypm/Desktop/DoS/test_small"
     showVidAndPlot = False                        # True to show the video and plots while being processed
     breakpoints = 6                               # Keep between 5 - 7. Ineffective above 10 and will take much longer.
     """

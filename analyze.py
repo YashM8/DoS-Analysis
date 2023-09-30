@@ -13,6 +13,7 @@ def piecewise(df, breaks):
     """
     Performs piecewise regression oh the data and picks the slope over the largest time period.
 
+    :param breaks: Number of line segments to fit a line.
     :param df: Data to perform the segmented regression on.
     :return: Plot and the slope of the desired region.
     """
@@ -269,3 +270,73 @@ def flagFiles(directory_path):
 
     # Return the count of flagged files
     return count
+
+
+data = pd.read_csv("/Users/ypm/Desktop/DoS/test_big/0.01wt_ wsr 301, 4 Aug 2023 YM  (1)/OriginalData.csv")
+data.dropna(inplace=True)
+
+
+def break_and_fit(data):
+    """
+    Piecewise fit works better, but this finds breakpoints automatically.
+
+    :param data: Data to fit.
+    :return: Slope and plot.
+    """
+    # Calculate the number of data points in each segment
+    segment_size = len(data) // 10
+
+    # Initialize variables to track sum_section values and marked points
+    sum_section = []
+    marked_points = []
+
+    for i in range(0, len(data), segment_size):
+        segment = data.iloc[i:i + segment_size]
+        sum_section.append(segment['Width'].sum())
+
+    # Find the threshold for marking points
+    mad = np.median(np.abs(np.diff(sum_section)))
+    threshold = 1 * mad
+
+    # Mark points where the difference between consecutive sum_section values is too high
+    for i in range(1, len(sum_section)):
+        if abs(sum_section[i] - sum_section[i - 1]) > threshold:
+            marked_points.append(data.iloc[i * segment_size]['Times'])
+
+    # Plot the data
+    plt.figure(figsize=(12, 6))
+    plt.plot(data['Times'], data['Width'], label='Data')
+
+    # Mark the points on the plot
+    intervals = []
+    if marked_points:
+        intervals.append((data['Times'].iloc[0], marked_points[0]))
+        for i in range(len(marked_points) - 1):
+            intervals.append((marked_points[i], marked_points[i + 1]))
+        intervals.append((marked_points[-1], data['Times'].iloc[-1]))
+
+    # Step 2: Find the longest interval without marked points
+    longest_interval = max(intervals, key=lambda interval: interval[1] - interval[0])
+
+    # Extract the data within the longest interval
+    start_time, end_time = longest_interval
+    filtered_data = data[(data['Times'] >= start_time) & (data['Times'] <= end_time)]
+
+    # Fit a linear line to the data within the longest interval
+    coefficients = np.polyfit(filtered_data['Times'], filtered_data['Width'], 1)
+    linear_fit = np.poly1d(coefficients)
+
+    # Step 3: Plot the data and the linear fit
+    plt.figure(figsize=(12, 6))
+    plt.plot(data['Times'], data['Width'], label='Data')
+    plt.scatter(marked_points, [data[data['Times'] == t]['Width'].values[0] for t in marked_points], color='red',
+                label='Marked Points')
+    plt.plot(filtered_data['Times'], linear_fit(filtered_data['Times']), label='Linear Fit', color='green',
+             linewidth=2.0)
+
+    plt.xlabel('Times')
+    plt.ylabel('Width')
+    plt.legend()
+
+    slope = coefficients[0]
+    return plt, slope, []
