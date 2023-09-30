@@ -1,4 +1,4 @@
-# DoS-Analysis 
+# DoS Analysis Tool
 
 ### Click [here](#instructions) for instructions.
 
