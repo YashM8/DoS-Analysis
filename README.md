@@ -13,7 +13,7 @@ The `MeasureWidths` function `measure.py` gives the lowest measurement of the wi
 
 
 ## Finding the Slope
-The data is smoothed using a custom function (in `analyze.py`) that connects the centers of each step and interpolates points between them to account for missing values that could affect the linear fit.
+The data is smoothed using a custom function (in `analyze.py`) that connects the centers of each step and interpolates points between them to account for missing values that could affect the linear fit. 
 
 The `pwlf` library is used to fit a piecewise linear regression on the data and the appropriate slope is selected. Differential evolution is used to find the breakpoints for the data. More information can be found [here](https://jekel.me/piecewise_linear_fit_py/how_it_works.html).
 
@@ -30,7 +30,7 @@ Flagging bad data - Bad data is flagged automatically based on the sparsity of p
    - Show value. Set to `True` to show the video being processed and the plot with overlay.
    - Breaks, which are the number of breaks for the piecewise linear fit. The default is 6 segments.
 
-2. Allow time to process the files. The progress will be displayed in the console. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration. You can identify bad data as folders starting with `0_FLAG_<File Name>`.
+2. Allow time to process the files. The progress will be displayed in the console. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration. You can identify bad data as folders starting with `0_FLAG_<File Name>`. 
 
 5. You will be asked if you'd like to verify the results. Once, you click yes, a GUI opens up.
    - Browse the directory of the processed files.
