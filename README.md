@@ -1,5 +1,7 @@
 # DoS-Analysis 
 
+### Click [here](#instructions) for instructions.
+
 ## Brief Overview
 
 Measures the width of the droplet at it's narrowest point. Automatically finds the desired linear part and finds it's slope after smoothing the data. For extremely low concentrations of most compounds used, there is also a tool to manually change the slope (if necessary) using a GUI.
