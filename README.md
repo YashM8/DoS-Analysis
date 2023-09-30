@@ -42,4 +42,4 @@ The `pwlf` library is used to fit a piecewise linear regression on the data and 
 
 ## References
 [1]
-Charles F. Jekel, Gerhard Venter, "A Python Library for Fitting 1D Continuous Piecewise Linear Functions". Available Online [here](https://github.com/cjekel/piecewise_linear_fit_py).
+Charles F. Jekel, Gerhard Venter, "A Python Library for Fitting 1D Continuous Piecewise Linear Functions". Available Online [here](https://jekel.me/piecewise_linear_fit_py/how_it_works.html).
