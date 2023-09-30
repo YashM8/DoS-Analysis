@@ -29,8 +29,9 @@ The `pwlf` library is used to fit a piecewise linear regression on the data and 
    - Rows to skip, which is the number of rows that are skipped in each frame.
    - Show value. Set to `True` to show the video being processed and the plot with overlay.
    - Breaks, which is the number of segments for the piecewise linear fit. The default is 6.
+   - Run `main.py` to start the process.
 
-2. Allow time to process the files. The progress will be displayed in the console. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration. You can identify bad data as folders starting with `0_FLAG_<File Name>`. 
+2. Allow time to process the files. The progress will be displayed in the console. File names will be shown as they are finished processing. The number of files processed will be shown. And the number of files with bad data will be shown, typically files with very low concentration. You can identify bad data as folders starting with `0_FLAG_`. 
 
 5. You will be asked if you'd like to verify the results. Once, you click yes, a GUI opens up.
    - Browse the directory of the processed files.
@@ -39,6 +40,15 @@ The `pwlf` library is used to fit a piecewise linear regression on the data and 
    - Use left click for the start time and right click for the stop time.
    - Click `fit` to re-fit a slope to the data.
    - Click `save` to save changes to the generated output file (SLOPE_DATA.csv).
+  
+## Workflow
+
+1. Measure => 2. Data => 3. Smoothening => 4. Piecewise Linear Fit => 5. Slope => 6. Flagging => 7. Manual Verification (Optional)
+
+| Header 1 | 
+| -------- | 
+
+Steps 1 through 6 are done for every file in the specified directory automatically. Step 7 is done for every file manually through a GUI and is intended for flagged files.
 
 ## References
 [1]
