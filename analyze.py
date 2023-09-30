@@ -272,10 +272,6 @@ def flagFiles(directory_path):
     return count
 
 
-data = pd.read_csv("/Users/ypm/Desktop/DoS/test_big/0.01wt_ wsr 301, 4 Aug 2023 YM  (1)/OriginalData.csv")
-data.dropna(inplace=True)
-
-
 def break_and_fit(data):
     """
     Piecewise fit works better, but this finds breakpoints automatically.
