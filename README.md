@@ -4,7 +4,7 @@
 
 ## Brief Overview
 
-Measures the width of the droplet at it's narrowest point. Automatically finds the desired linear part and finds it's slope after smoothing the data. For extremely low concentrations of most compounds used, there is also a tool to manually change the slope (if necessary) using a GUI.
+Software tool developed for the [Frostad Research Group](https://food.chbe.ubc.ca/). Measures the width of the droplet at it's narrowest point. Automatically finds the desired linear part and finds it's slope after smoothing the data. For extremely low concentrations of most compounds used, there is also a tool to manually change the slope (if necessary) using a GUI.
 
 ## Measurement
 The `MeasureWidths` function `measure.py` gives the lowest measurement of the width in each frame. It checks each measurement to verify its accuracy before adding it to the dataset. The measurement is reliant on binarizing each frame and the threshold is automatically calculated from the points in the image.
@@ -15,7 +15,7 @@ The `MeasureWidths` function `measure.py` gives the lowest measurement of the wi
 ## Finding the Slope
 The data is smoothed using a custom function (in `analyze.py`) that connects the centers of each step and interpolates points between them to account for missing values that could affect the linear fit. 
 
-The `pwlf` library is used to fit a piecewise linear regression on the data and the appropriate slope is selected. Differential evolution is used to find the breakpoints for the data. More information can be found [here](https://jekel.me/piecewise_linear_fit_py/how_it_works.html).
+The `pwlf` library is used to fit a piecewise linear regression on the data and the appropriate slope is selected [1]. Differential evolution is used to find the breakpoints for the data. More information can be found [here](https://jekel.me/piecewise_linear_fit_py/how_it_works.html).
 
 <img src="images/OverlayPlot.png" alt="Alt text" title="Optional title" width="600" height="300">
 
@@ -40,6 +40,6 @@ The `pwlf` library is used to fit a piecewise linear regression on the data and 
    - Click `fit` to re-fit a slope to the data.
    - Click `save` to save changes to the generated output file (SLOPE_DATA.csv).
 
-
-
-
+## References
+[1]
+Charles F. Jekel, Gerhard Venter, "A Python Library for Fitting 1D Continuous Piecewise Linear Functions". Available Online [here](https://github.com/cjekel/piecewise_linear_fit_py).
