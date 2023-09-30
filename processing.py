@@ -148,5 +148,6 @@ if __name__ == "__main__":
                              fps=framesPerSecond,
                              needle_width=needleWidth,
                              skip=(rowsToSkip + 1),
-                             show_the_vid=showVidAndPlot)
+                             show_the_vid=showVidAndPlot,
+                             breaks=6)
     dos_app.run()
