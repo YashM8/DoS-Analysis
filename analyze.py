@@ -30,7 +30,7 @@ def piecewise(df, breaks):
     df = df.iloc[:truncate_index]
 
     # Initialize PiecewiseLinFit
-    myPWLF = pwlf.PiecewiseLinFit(df['Times'], df['Width'], seed=1975)
+    myPWLF = pwlf.PiecewiseLinFit(df['Times'], df['Width'])
 
     # Fit the data for n line segments
     myPWLF.fit(breaks)
@@ -43,6 +43,12 @@ def piecewise(df, breaks):
 
     # Get the slope of the largest time period
     largest_segment_slope = slopes[largest_segment_idx]
+
+    flag = False
+    if largest_segment_idx not in [2, 3, 4]:
+        flag = True
+
+    print(f"Bad data? {flag}")
 
     # Predict for the determined points
     xHat = df['Times']
@@ -70,7 +76,7 @@ def piecewise(df, breaks):
     plt.grid()
     # plt.show()
 
-    return plt, largest_segment_slope, slopes
+    return plt, largest_segment_slope, slopes, flag
 
 
 def linspaceSmoother(df):

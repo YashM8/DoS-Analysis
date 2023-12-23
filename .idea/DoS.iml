@@ -12,7 +12,7 @@
       <excludeFolder url="file://$MODULE_DIR$/video_files/vlc-record-2023-07-28-13h35m55s-0.1wt_ WSR 301, new,1, 28 July YM  (2).mp4-" />
       <excludeFolder url="file://$MODULE_DIR$/video_files/vlc-record-2023-07-28-13h38m56s-0.1wt_ WSR 301, new,1, 28 July YM  (3).mp4-" />
     </content>
-    <orderEntry type="jdk" jdkName="cpsc330" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="mllibs" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

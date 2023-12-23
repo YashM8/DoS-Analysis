@@ -26,6 +26,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not, break
     troubleshoot_data = []
     print("\nStarting...\n")
 
+    flagged_files = 0
     # Iterate through each MP4 file and analyze it.
     for index, mp4_file in enumerate(mp4_files):
         try:
@@ -33,13 +34,19 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not, break
             df = measureWidths(filename=mp4_file, needle_mm=needle, fps=frames_ps, show=show_or_not, skip=skip_cols)
 
             # Perform piecewise analysis and get plot data.
-            myPlot, slope, all_5_slopes = piecewise(df, breaks)
+            myPlot, slope, all_5_slopes, flag = piecewise(df, breaks)
 
             # Extract the file name from the path.
             name = os.path.basename(mp4_file)
 
             # Create a directory for saving analysis results.
             plot_directory = os.path.splitext(mp4_file)[0]
+            if flag:
+                # Create a new folder with the prefix "FLAG_"
+                new_folder_name = "0_FLAG_" + os.path.basename(plot_directory)
+                plot_directory = os.path.join(os.path.dirname(plot_directory), new_folder_name)
+                flagged_files += 1
+
             os.makedirs(plot_directory, exist_ok=True)
 
             # Save the data to CSV file.
@@ -72,10 +79,7 @@ def process_mp4_file(directory, needle, frames_ps, skip_cols, show_or_not, break
 
     # After processing all files, print the total number of files processed.
     print(f"{len(mp4_files)} Files Processed. Flagging Bad Data...\n")
-
-    count = flagFiles(directory)
-
-    print(f"{count} Files Flagged.\n")
+    print(f"{flagged_files} files flagged.")
     print("DONE! Find flagged files with the folder name beginning with '0_FLAG_...'\n")
 
     # Define output file paths for slope and troubleshooting data CSV files.
